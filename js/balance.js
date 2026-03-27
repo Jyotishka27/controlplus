@@ -27,9 +27,7 @@ function renderBalances() {
   document.getElementById("savingsBBalance").textContent = balances.savingsB;
 }
 
-// =======================
-// NET WORTH LOGIC
-// =======================
+// Net Worth
 
 function calculateNetWorth() {
   const balances = calculateBalances();
@@ -43,12 +41,10 @@ function calculateNetWorth() {
     0
   );
 
-  const netWorth = totalSavings - totalLoans;
-
   return {
     totalSavings,
     totalLoans,
-    netWorth
+    netWorth: totalSavings - totalLoans
   };
 }
 
