@@ -23,6 +23,7 @@ function addLoan() {
   saveLoans(loans);
 
   renderLoans();
+  renderNetWorth(); // 🔥 added
 }
 
 function renderLoans() {
@@ -80,4 +81,5 @@ function payEMI(id) {
   renderLoans();
   renderEntries();
   renderBalances();
+  renderNetWorth(); // 🔥 added
 }
