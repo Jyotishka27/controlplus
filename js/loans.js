@@ -23,7 +23,7 @@ function addLoan() {
   saveLoans(loans);
 
   renderLoans();
-  renderNetWorth(); // 🔥 added
+  renderNetWorth();
 }
 
 function renderLoans() {
@@ -51,19 +51,13 @@ function payEMI(id) {
   let entries = loadEntries();
 
   const loan = loans.find(l => l.id === id);
-
-  if (!loan) return;
-
-  if (loan.remainingAmount <= 0) {
-    alert("Loan already paid");
-    return;
-  }
+  if (!loan || loan.remainingAmount <= 0) return;
 
   const payment = Math.min(loan.emi, loan.remainingAmount);
 
   loan.remainingAmount -= payment;
 
-  const entry = {
+  entries.push({
     id: Date.now(),
     amount: payment,
     type: "expense",
@@ -71,9 +65,7 @@ function payEMI(id) {
     account: "main",
     notes: loan.name,
     date: new Date().toISOString().split("T")[0]
-  };
-
-  entries.push(entry);
+  });
 
   saveLoans(loans);
   saveEntries(entries);
@@ -81,5 +73,6 @@ function payEMI(id) {
   renderLoans();
   renderEntries();
   renderBalances();
-  renderNetWorth(); // 🔥 added
+  renderNetWorth();
+  renderInsights();
 }
