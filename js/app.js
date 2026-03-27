@@ -1,11 +1,8 @@
-// INIT
-
 renderEntries();
 renderBalances();
 renderLoans();
-renderNetWorth(); // 🔥 added
-
-// UX Improvements
+renderNetWorth();
+renderInsights();
 
 document.getElementById("amount").focus();
 
