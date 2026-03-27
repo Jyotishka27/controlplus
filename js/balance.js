@@ -10,9 +10,7 @@ function calculateBalances() {
   entries.forEach(entry => {
     if (entry.type === "expense") {
       balances[entry.account] -= entry.amount;
-    }
-
-    else if (entry.type === "investment" || entry.type === "transfer") {
+    } else if (entry.type === "investment" || entry.type === "transfer") {
       balances.main -= entry.amount;
       balances[entry.account] += entry.amount;
     }
@@ -27,4 +25,37 @@ function renderBalances() {
   document.getElementById("mainBalance").textContent = balances.main;
   document.getElementById("savingsABalance").textContent = balances.savingsA;
   document.getElementById("savingsBBalance").textContent = balances.savingsB;
+}
+
+// =======================
+// NET WORTH LOGIC
+// =======================
+
+function calculateNetWorth() {
+  const balances = calculateBalances();
+  const loans = loadLoans();
+
+  const totalSavings =
+    balances.main + balances.savingsA + balances.savingsB;
+
+  const totalLoans = loans.reduce(
+    (sum, loan) => sum + loan.remainingAmount,
+    0
+  );
+
+  const netWorth = totalSavings - totalLoans;
+
+  return {
+    totalSavings,
+    totalLoans,
+    netWorth
+  };
+}
+
+function renderNetWorth() {
+  const data = calculateNetWorth();
+
+  document.getElementById("totalSavings").textContent = data.totalSavings;
+  document.getElementById("totalLoans").textContent = data.totalLoans;
+  document.getElementById("netWorth").textContent = data.netWorth;
 }
