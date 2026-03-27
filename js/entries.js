@@ -23,6 +23,7 @@ function saveEntry() {
 
   renderEntries();
   renderBalances();
+  renderNetWorth(); // 🔥 added
   clearForm();
 }
 
@@ -34,6 +35,7 @@ function deleteEntry(id) {
 
   renderEntries();
   renderBalances();
+  renderNetWorth(); // 🔥 added
 }
 
 function renderEntries() {
