@@ -1,12 +1,4 @@
 const STORAGE_KEY = "vault_entries";
-const BALANCE_KEY = "vault_balances";
-
-// Default balances
-const defaultBalances = {
-  main: 0,
-  savingsA: 0,
-  savingsB: 0
-};
 
 // =======================
 // STORAGE FUNCTIONS
@@ -21,37 +13,38 @@ function saveEntries(entries) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
 }
 
-function loadBalances() {
-  const data = localStorage.getItem(BALANCE_KEY);
-  return data ? JSON.parse(data) : { ...defaultBalances };
-}
-
-function saveBalances(balances) {
-  localStorage.setItem(BALANCE_KEY, JSON.stringify(balances));
-}
-
 // =======================
-// BALANCE LOGIC
+// BALANCE ENGINE (NEW)
 // =======================
 
-function updateBalances(entry) {
-  const balances = loadBalances();
+function calculateBalances() {
+  const entries = loadEntries();
 
-  if (entry.type === "expense") {
-    balances[entry.account] -= entry.amount;
-  }
+  const balances = {
+    main: 0,
+    savingsA: 0,
+    savingsB: 0
+  };
 
-  else if (entry.type === "investment") {
-    balances.main -= entry.amount;
-    balances[entry.account] += entry.amount;
-  }
+  entries.forEach(entry => {
 
-  else if (entry.type === "transfer") {
-    balances.main -= entry.amount;
-    balances[entry.account] += entry.amount;
-  }
+    if (entry.type === "expense") {
+      balances[entry.account] -= entry.amount;
+    }
 
-  saveBalances(balances);
+    else if (entry.type === "investment") {
+      balances.main -= entry.amount;
+      balances[entry.account] += entry.amount;
+    }
+
+    else if (entry.type === "transfer") {
+      balances.main -= entry.amount;
+      balances[entry.account] += entry.amount;
+    }
+
+  });
+
+  return balances;
 }
 
 // =======================
@@ -81,8 +74,6 @@ function saveEntry() {
   entries.push(entry);
   saveEntries(entries);
 
-  updateBalances(entry);
-
   renderEntries();
   renderBalances();
   clearForm();
@@ -99,8 +90,8 @@ function deleteEntry(id) {
 
   saveEntries(entries);
 
-  // NOTE: balances not recalculated yet
   renderEntries();
+  renderBalances(); // ✅ always correct now
 }
 
 // =======================
@@ -128,7 +119,7 @@ function renderEntries() {
 }
 
 function renderBalances() {
-  const balances = loadBalances();
+  const balances = calculateBalances();
 
   document.getElementById("mainBalance").textContent = balances.main;
   document.getElementById("savingsABalance").textContent = balances.savingsA;
