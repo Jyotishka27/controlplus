@@ -12,33 +12,28 @@ const defaultBalances = {
 // STORAGE FUNCTIONS
 // =======================
 
-// Load entries
 function loadEntries() {
   const data = localStorage.getItem(STORAGE_KEY);
   return data ? JSON.parse(data) : [];
 }
 
-// Save entries
 function saveEntries(entries) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
 }
 
-// Load balances
 function loadBalances() {
   const data = localStorage.getItem(BALANCE_KEY);
   return data ? JSON.parse(data) : { ...defaultBalances };
 }
 
-// Save balances
 function saveBalances(balances) {
   localStorage.setItem(BALANCE_KEY, JSON.stringify(balances));
 }
 
 // =======================
-// CORE LOGIC
+// BALANCE LOGIC
 // =======================
 
-// Update balances based on entry
 function updateBalances(entry) {
   const balances = loadBalances();
 
@@ -47,13 +42,11 @@ function updateBalances(entry) {
   }
 
   else if (entry.type === "investment") {
-    // from main → to selected savings
     balances.main -= entry.amount;
     balances[entry.account] += entry.amount;
   }
 
   else if (entry.type === "transfer") {
-    // for now: main → selected account
     balances.main -= entry.amount;
     balances[entry.account] += entry.amount;
   }
@@ -70,7 +63,6 @@ function saveEntry() {
 
   const amount = Number(document.getElementById("amount").value);
 
-  // Basic validation
   if (!amount || amount <= 0) {
     alert("Enter a valid amount");
     return;
@@ -86,40 +78,55 @@ function saveEntry() {
     date: new Date().toISOString().split("T")[0]
   };
 
-  // Save entry
   entries.push(entry);
   saveEntries(entries);
 
-  // Update balances
   updateBalances(entry);
 
-  // Refresh UI
   renderEntries();
   renderBalances();
   clearForm();
 }
 
 // =======================
+// DELETE ENTRY
+// =======================
+
+function deleteEntry(id) {
+  let entries = loadEntries();
+
+  entries = entries.filter(e => e.id !== id);
+
+  saveEntries(entries);
+
+  // NOTE: balances not recalculated yet
+  renderEntries();
+}
+
+// =======================
 // RENDER FUNCTIONS
 // =======================
 
-// Render entry list
 function renderEntries() {
   const entries = loadEntries();
   const list = document.getElementById("entryList");
 
   list.innerHTML = "";
 
-  entries.forEach(e => {
+  const reversed = [...entries].reverse();
+
+  reversed.forEach(e => {
     const li = document.createElement("li");
 
-    li.textContent = `₹${e.amount} | ${e.type.toUpperCase()} | ${e.category} | ${e.account}`;
+    li.innerHTML = `
+      ₹${e.amount} | ${e.type.toUpperCase()} | <b>${e.category}</b> | ${e.account}
+      <button onclick="deleteEntry(${e.id})">❌</button>
+    `;
 
     list.appendChild(li);
   });
 }
 
-// Render balances
 function renderBalances() {
   const balances = loadBalances();
 
@@ -132,16 +139,28 @@ function renderBalances() {
 // UTIL
 // =======================
 
-// Clear form after save
 function clearForm() {
   document.getElementById("amount").value = "";
   document.getElementById("notes").value = "";
 }
 
 // =======================
+// UX IMPROVEMENTS
+// =======================
+
+// Auto focus
+document.getElementById("amount").focus();
+
+// Enter key to save
+document.getElementById("amount").addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    saveEntry();
+  }
+});
+
+// =======================
 // INIT
 // =======================
 
-// Initial render on load
 renderEntries();
 renderBalances();
