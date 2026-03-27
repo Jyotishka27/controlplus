@@ -1,3 +1,15 @@
+function getCategoryIcon(category) {
+  const icons = {
+    Food: "🍔",
+    Petrol: "⛽",
+    EMI: "💳",
+    LIC: "🛡️",
+    Shopping: "🛍️",
+    Other: "📦"
+  };
+  return icons[category] || "📌";
+}
+
 function saveEntry() {
   const entries = loadEntries();
 
@@ -51,9 +63,37 @@ function renderEntries() {
   reversed.forEach(e => {
     const li = document.createElement("li");
 
+    li.className = `entry-item entry-${e.type}`;
+
     li.innerHTML = `
-      ₹${e.amount} | ${e.type.toUpperCase()} | <b>${e.category}</b> | ${e.account}
-      <button onclick="deleteEntry(${e.id})">❌</button>
+      <div class="entry-left">
+
+        <div class="entry-title">
+          ${getCategoryIcon(e.category)} ${e.category}
+        </div>
+
+        <div class="entry-sub">
+          ${e.type.toUpperCase()} • ${e.account}
+        </div>
+
+        ${e.notes ? `<div class="entry-sub">${e.notes}</div>` : ""}
+
+        <div class="entry-sub">
+          ${new Date(e.date).toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short"
+          })}
+        </div>
+
+        <button class="delete-btn" onclick="deleteEntry(${e.id})">
+          Delete
+        </button>
+
+      </div>
+
+      <div class="entry-amount amount-${e.type}">
+        ₹${e.amount}
+      </div>
     `;
 
     list.appendChild(li);
