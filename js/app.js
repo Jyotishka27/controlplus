@@ -3,6 +3,7 @@
 renderEntries();
 renderBalances();
 renderLoans();
+renderNetWorth(); // 🔥 added
 
 // UX Improvements
 
