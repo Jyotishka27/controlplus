@@ -21,109 +21,146 @@
     <h1 class="text-2xl font-semibold mb-8">💰 Control+</h1>
 
     <nav class="space-y-4">
-      <button class="block w-full text-left hover:text-blue-400">Dashboard</button>
-      <button class="block w-full text-left hover:text-blue-400">Entries</button>
-      <button class="block w-full text-left hover:text-blue-400">Insights</button>
+      <button onclick="showTab('dashboard')" class="block w-full text-left hover:text-blue-400">
+        Dashboard
+      </button>
+      <button onclick="showTab('loans')" class="block w-full text-left hover:text-blue-400">
+        Loans
+      </button>
     </nav>
   </aside>
 
   <!-- MAIN -->
   <main class="flex-1 p-6 overflow-y-auto">
 
-    <!-- HEADER -->
-    <h2 class="text-xl font-semibold mb-6">March 2026</h2>
+    <!-- ================= DASHBOARD TAB ================= -->
+    <div id="dashboardTab">
 
-    <!-- BALANCE CARDS -->
-    <div class="grid grid-cols-3 gap-6 mb-6">
+      <!-- HEADER -->
+      <h2 class="text-xl font-semibold mb-6">March 2026</h2>
 
-      <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500 text-sm">Main Balance</p>
-        <h1 id="mainBalance" class="text-2xl font-semibold mt-2">₹0</h1>
+      <!-- BALANCE CARDS -->
+      <div class="grid grid-cols-3 gap-6 mb-6">
+
+        <div class="bg-white p-5 rounded-xl shadow">
+          <p class="text-gray-500 text-sm">Main Balance</p>
+          <h1 id="mainBalance" class="text-2xl font-semibold mt-2">₹0</h1>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+          <p class="text-gray-500 text-sm">Savings A</p>
+          <h1 id="savingsA" class="text-2xl font-semibold mt-2">₹0</h1>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+          <p class="text-gray-500 text-sm">Savings B</p>
+          <h1 id="savingsB" class="text-2xl font-semibold mt-2">₹0</h1>
+        </div>
+
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500 text-sm">Savings A</p>
-        <h1 id="savingsA" class="text-2xl font-semibold mt-2">₹0</h1>
+      <!-- ENTRY FORM -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <h3 class="text-lg font-semibold mb-4">Add Entry</h3>
+
+        <div class="grid grid-cols-5 gap-3">
+
+          <input id="amount" type="number" placeholder="Amount"
+            class="border p-2 rounded-lg" />
+
+          <select id="type" class="border p-2 rounded-lg">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+            <option value="investment">Investment</option>
+            <option value="transfer">Transfer</option>
+          </select>
+
+          <select id="category" class="border p-2 rounded-lg">
+            <option value="Food">Food</option>
+            <option value="Petrol">Petrol</option>
+            <option value="EMI">EMI</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <select id="account" class="border p-2 rounded-lg">
+            <option value="main">Main</option>
+            <option value="savingsA">Savings A</option>
+            <option value="savingsB">Savings B</option>
+          </select>
+
+          <button onclick="saveEntry()"
+            class="bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Save
+          </button>
+
+        </div>
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500 text-sm">Savings B</p>
-        <h1 id="savingsB" class="text-2xl font-semibold mt-2">₹0</h1>
+      <!-- INSIGHTS -->
+      <div class="grid grid-cols-3 gap-6 mb-6">
+
+        <div class="bg-white p-5 rounded-xl shadow">
+          <p class="text-gray-500 text-sm">Total Spent</p>
+          <h2 id="totalSpent" class="text-xl font-semibold mt-2">₹0</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+          <p class="text-gray-500 text-sm">Total Invested</p>
+          <h2 id="totalInvested" class="text-xl font-semibold mt-2">₹0</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+          <p class="text-gray-500 text-sm">EMI Paid</p>
+          <h2 id="emiPaid" class="text-xl font-semibold mt-2">₹0</h2>
+        </div>
+
+      </div>
+
+      <!-- ENTRIES TABLE -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 class="text-lg font-semibold mb-4">Entries</h3>
+
+        <table class="w-full text-left">
+          <thead>
+            <tr class="text-gray-500 text-sm border-b">
+              <th class="pb-2">Amount</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th>Account</th>
+            </tr>
+          </thead>
+
+          <tbody id="entriesList" class="text-sm"></tbody>
+        </table>
       </div>
 
     </div>
 
-    <!-- ENTRY FORM -->
-    <div class="bg-white p-6 rounded-xl shadow mb-6">
-      <h3 class="text-lg font-semibold mb-4">Add Entry</h3>
+    <!-- ================= LOANS TAB ================= -->
+    <div id="loansTab" class="hidden">
 
-      <div class="grid grid-cols-5 gap-3">
+      <h2 class="text-xl font-semibold mb-6">Loans</h2>
 
-        <input id="amount" type="number" placeholder="Amount"
-          class="border p-2 rounded-lg" />
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
 
-        <select id="type" class="border p-2 rounded-lg">
-          <option value="expense">Expense</option>
-          <option value="income">Income</option>
-        </select>
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <input id="loanName" placeholder="Loan Name" class="border p-2 rounded-lg" />
+          <input id="loanTotal" type="number" placeholder="Total Amount" class="border p-2 rounded-lg" />
+          <input id="loanEMI" type="number" placeholder="EMI" class="border p-2 rounded-lg" />
+        </div>
 
-        <select id="category" class="border p-2 rounded-lg">
-          <option value="food">Food</option>
-          <option value="transport">Transport</option>
-        </select>
-
-        <select id="account" class="border p-2 rounded-lg">
-          <option value="main">Main</option>
-          <option value="savingsA">Savings A</option>
-          <option value="savingsB">Savings B</option>
-        </select>
-
-        <button onclick="saveEntry()"
-          class="bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-          Save
+        <button onclick="addLoan()"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+          Add Loan
         </button>
 
       </div>
-    </div>
 
-    <!-- INSIGHTS -->
-    <div class="grid grid-cols-3 gap-6 mb-6">
-
-      <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500 text-sm">Total Spent</p>
-        <h2 id="totalSpent" class="text-xl font-semibold mt-2">₹0</h2>
+      <div class="bg-white p-6 rounded-xl shadow">
+        <ul id="loanList" class="space-y-3 text-sm"></ul>
       </div>
 
-      <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500 text-sm">Total Invested</p>
-        <h2 id="totalInvested" class="text-xl font-semibold mt-2">₹0</h2>
-      </div>
-
-      <div class="bg-white p-5 rounded-xl shadow">
-        <p class="text-gray-500 text-sm">EMI Paid</p>
-        <h2 id="emiPaid" class="text-xl font-semibold mt-2">₹0</h2>
-      </div>
-
-    </div>
-
-    <!-- ENTRIES TABLE -->
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-lg font-semibold mb-4">Entries</h3>
-
-      <table class="w-full text-left">
-        <thead>
-          <tr class="text-gray-500 text-sm border-b">
-            <th class="pb-2">Amount</th>
-            <th>Type</th>
-            <th>Category</th>
-            <th>Account</th>
-          </tr>
-        </thead>
-
-        <tbody id="entriesList" class="text-sm">
-          <!-- JS will render -->
-        </tbody>
-      </table>
     </div>
 
   </main>
@@ -136,6 +173,6 @@
 <script src="./js/insights.js"></script>
 <script src="./js/loans.js"></script>
 <script src="./js/app.js"></script>
-  
+
 </body>
 </html>
