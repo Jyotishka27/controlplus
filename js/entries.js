@@ -54,49 +54,21 @@ function deleteEntry(id) {
 
 function renderEntries() {
   const entries = loadEntries();
-  const list = document.getElementById("entryList");
+  const list = document.getElementById("entriesList");
 
   list.innerHTML = "";
 
   const reversed = [...entries].reverse();
 
   reversed.forEach(e => {
-    const li = document.createElement("li");
-
-    li.className = `entry-item entry-${e.type}`;
-
-    li.innerHTML = `
-      <div class="entry-left">
-
-        <div class="entry-title">
-          ${getCategoryIcon(e.category)} ${e.category}
-        </div>
-
-        <div class="entry-sub">
-          ${e.type.toUpperCase()} • ${e.account}
-        </div>
-
-        ${e.notes ? `<div class="entry-sub">${e.notes}</div>` : ""}
-
-        <div class="entry-sub">
-          ${new Date(e.date).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short"
-          })}
-        </div>
-
-        <button class="delete-btn" onclick="deleteEntry(${e.id})">
-          Delete
-        </button>
-
-      </div>
-
-      <div class="entry-amount amount-${e.type}">
-        ₹${e.amount}
-      </div>
+    list.innerHTML += `
+      <tr class="border-b hover:bg-gray-50">
+        <td class="py-2">₹${e.amount}</td>
+        <td class="capitalize">${e.type}</td>
+        <td>${e.category}</td>
+        <td class="capitalize">${e.account}</td>
+      </tr>
     `;
-
-    list.appendChild(li);
   });
 }
 
