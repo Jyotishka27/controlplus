@@ -46,8 +46,7 @@ function calculateInsights() {
 function renderInsights() {
   const data = calculateInsights();
 
-  document.getElementById("totalSpent").textContent = data.totalSpent;
-  document.getElementById("totalInvested").textContent = data.totalInvested;
-  document.getElementById("topCategory").textContent = data.topCategory;
-  document.getElementById("emiPaid").textContent = data.emiPaid;
+  document.getElementById("totalSpent").textContent = `₹${data.totalSpent}`;
+  document.getElementById("totalInvested").textContent = `₹${data.totalInvested}`;
+  document.getElementById("emiPaid").textContent = `₹${data.emiPaid}`;
 }
