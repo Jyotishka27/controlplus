@@ -22,9 +22,9 @@ function calculateBalances() {
 function renderBalances() {
   const balances = calculateBalances();
 
-  document.getElementById("mainBalance").textContent = balances.main;
-  document.getElementById("savingsABalance").textContent = balances.savingsA;
-  document.getElementById("savingsBBalance").textContent = balances.savingsB;
+  document.getElementById("mainBalance").textContent = `₹${balances.main}`;
+  document.getElementById("savingsA").textContent = `₹${balances.savingsA}`;
+  document.getElementById("savingsB").textContent = `₹${balances.savingsB}`;
 }
 
 // Net Worth
