@@ -74,5 +74,4 @@ function renderEntries() {
 
 function clearForm() {
   document.getElementById("amount").value = "";
-  document.getElementById("notes").value = "";
 }
