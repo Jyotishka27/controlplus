@@ -1,137 +1,136 @@
-<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Control+</title>
 
-  <!-- HEADER -->
-  <div class="header">
-    <h1>💸 Control+</h1>
-    <p id="currentMonth">March 2026</p>
-  </div>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
 
-  <div class="container">
+<body class="bg-gray-100">
 
-    <!-- ADD ENTRY -->
-    <div class="card">
-      <h2>💰 Add Entry</h2>
+<div class="flex h-screen">
 
-      <div class="form-row">
-        <input type="number" id="amount" placeholder="Amount">
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-gray-900 text-white p-6">
+    <h1 class="text-2xl font-semibold mb-8">💰 Control+</h1>
 
-        <select id="type">
-          <option value="expense">Expense</option>
-          <option value="investment">Investment</option>
-          <option value="transfer">Transfer</option>
-        </select>
+    <nav class="space-y-4">
+      <button class="block w-full text-left hover:text-blue-400">Dashboard</button>
+      <button class="block w-full text-left hover:text-blue-400">Entries</button>
+      <button class="block w-full text-left hover:text-blue-400">Insights</button>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-6 overflow-y-auto">
+
+    <!-- HEADER -->
+    <h2 class="text-xl font-semibold mb-6">March 2026</h2>
+
+    <!-- BALANCE CARDS -->
+    <div class="grid grid-cols-3 gap-6 mb-6">
+
+      <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500 text-sm">Main Balance</p>
+        <h1 id="mainBalance" class="text-2xl font-semibold mt-2">₹0</h1>
       </div>
 
-      <div class="form-row">
-        <select id="category">
-          <option>Food</option>
-          <option>Petrol</option>
-          <option>EMI</option>
-          <option>LIC</option>
-          <option>Shopping</option>
-          <option>Other</option>
+      <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500 text-sm">Savings A</p>
+        <h1 id="savingsA" class="text-2xl font-semibold mt-2">₹0</h1>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500 text-sm">Savings B</p>
+        <h1 id="savingsB" class="text-2xl font-semibold mt-2">₹0</h1>
+      </div>
+
+    </div>
+
+    <!-- ENTRY FORM -->
+    <div class="bg-white p-6 rounded-xl shadow mb-6">
+      <h3 class="text-lg font-semibold mb-4">Add Entry</h3>
+
+      <div class="grid grid-cols-5 gap-3">
+
+        <input id="amount" type="number" placeholder="Amount"
+          class="border p-2 rounded-lg" />
+
+        <select id="type" class="border p-2 rounded-lg">
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
         </select>
 
-        <select id="account">
+        <select id="category" class="border p-2 rounded-lg">
+          <option value="food">Food</option>
+          <option value="transport">Transport</option>
+        </select>
+
+        <select id="account" class="border p-2 rounded-lg">
           <option value="main">Main</option>
           <option value="savingsA">Savings A</option>
           <option value="savingsB">Savings B</option>
         </select>
+
+        <button onclick="saveEntry()"
+          class="bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          Save
+        </button>
+
       </div>
-
-      <input type="text" id="notes" placeholder="Notes">
-
-      <button class="primary-btn" onclick="saveEntry()">Save Entry</button>
-    </div>
-
-    <!-- TOP STATS -->
-    <div class="grid-3">
-
-      <div class="card stat">
-        <p>💰 Main Balance</p>
-        <h2>₹<span id="mainBalance">0</span></h2>
-      </div>
-
-      <div class="card stat">
-        <p>🏦 Savings A</p>
-        <h2>₹<span id="savingsABalance">0</span></h2>
-      </div>
-
-      <div class="card stat">
-        <p>🏦 Savings B</p>
-        <h2>₹<span id="savingsBBalance">0</span></h2>
-      </div>
-
-    </div>
-
-    <!-- NET WORTH -->
-    <div class="card">
-      <h3>📊 Net Worth</h3>
-      <div class="grid-2">
-        <div>Total Savings<br><span id="totalSavings" class="highlight"></span></div>
-        <div>Total Loans<br><span id="totalLoans" class="highlight"></span></div>
-      </div>
-      <h2 class="net-worth">₹<span id="netWorth"></span></h2>
     </div>
 
     <!-- INSIGHTS -->
-    <div class="card">
-      <h3>📈 Monthly Insights</h3>
+    <div class="grid grid-cols-3 gap-6 mb-6">
 
-      <div class="grid-2">
-        <div>
-          Total Spent<br>
-          <span id="totalSpent" class="expense"></span>
-        </div>
-
-        <div>
-          Total Invested<br>
-          <span id="totalInvested" class="income"></span>
-        </div>
-
-        <div>
-          EMI Paid<br>
-          <span id="emiPaid"></span>
-        </div>
-
-        <div>
-          Top Category<br>
-          <span id="topCategory"></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ENTRIES -->
-    <div class="card">
-      <h3>📋 Entries</h3>
-      <ul id="entryList" class="entry-list"></ul>
-    </div>
-
-    <!-- LOANS -->
-    <div class="card">
-      <h3>💳 Loans</h3>
-
-      <div class="form-row">
-        <input type="text" id="loanName" placeholder="Loan Name">
-        <input type="number" id="loanTotal" placeholder="Total Amount">
+      <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500 text-sm">Total Spent</p>
+        <h2 id="totalSpent" class="text-xl font-semibold mt-2">₹0</h2>
       </div>
 
-      <div class="form-row">
-        <input type="number" id="loanEMI" placeholder="EMI Amount">
-        <button class="secondary-btn" onclick="addLoan()">Add Loan</button>
+      <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500 text-sm">Total Invested</p>
+        <h2 id="totalInvested" class="text-xl font-semibold mt-2">₹0</h2>
       </div>
 
-      <ul id="loanList" class="loan-list"></ul>
+      <div class="bg-white p-5 rounded-xl shadow">
+        <p class="text-gray-500 text-sm">EMI Paid</p>
+        <h2 id="emiPaid" class="text-xl font-semibold mt-2">₹0</h2>
+      </div>
+
     </div>
 
-  </div>
+    <!-- ENTRIES TABLE -->
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h3 class="text-lg font-semibold mb-4">Entries</h3>
 
-  <!-- Scripts -->
-  <script src="js/storage.js"></script>
-  <script src="js/balance.js"></script>
-  <script src="js/entries.js"></script>
-  <script src="js/loans.js"></script>
-  <script src="js/insights.js"></script>
-  <script src="js/app.js"></script>
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-gray-500 text-sm border-b">
+            <th class="pb-2">Amount</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Account</th>
+          </tr>
+        </thead>
+
+        <tbody id="entriesList" class="text-sm">
+          <!-- JS will render -->
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="./app.js"></script>
 
 </body>
+</html>
