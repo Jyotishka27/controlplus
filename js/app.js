@@ -1,9 +1,13 @@
 function init() {
   renderEntries();
   renderBalances();
-  renderLoans();
   renderNetWorth();
   renderInsights();
+
+  // ✅ Only run if loans UI exists
+  if (document.getElementById("loanList")) {
+    renderLoans();
+  }
 
   const amountInput = document.getElementById("amount");
 
