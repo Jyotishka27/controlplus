@@ -1,13 +1,21 @@
-renderEntries();
-renderBalances();
-renderLoans();
-renderNetWorth();
-renderInsights();
+function init() {
+  renderEntries();
+  renderBalances();
+  renderLoans();
+  renderNetWorth();
+  renderInsights();
 
-document.getElementById("amount").focus();
+  const amountInput = document.getElementById("amount");
 
-document.getElementById("amount").addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    saveEntry();
+  if (amountInput) {
+    amountInput.focus();
+
+    amountInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        saveEntry();
+      }
+    });
   }
-});
+}
+
+init();
