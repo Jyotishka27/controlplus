@@ -1,178 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Control+</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
     }
-  </style>
+  </script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 dark:bg-[#0b0f19] text-gray-900 dark:text-white transition-all">
 
-<div class="flex h-screen">
+<div class="flex min-h-screen">
 
-  <!-- SIDEBAR -->
-  <aside class="w-64 bg-gray-900 text-white p-6">
-    <h1 class="text-2xl font-semibold mb-8">💰 Control+</h1>
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white dark:bg-[#111827] shadow-lg p-6">
+    <h1 class="text-xl font-bold mb-8">💰 Control+</h1>
 
     <nav class="space-y-4">
-      <button onclick="showTab('dashboard')" class="block w-full text-left hover:text-blue-400">
-        Dashboard
-      </button>
-      <button onclick="showTab('loans')" class="block w-full text-left hover:text-blue-400">
-        Loans
-      </button>
+      <button class="block w-full text-left px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-800">Dashboard</button>
+      <button class="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800">Loans</button>
     </nav>
+
+    <!-- Toggle -->
+    <div class="mt-10">
+      <button onclick="toggleTheme()" class="w-full px-4 py-2 bg-black text-white dark:bg-white dark:text-black rounded-lg">
+        Toggle Theme
+      </button>
+    </div>
   </aside>
 
-  <!-- MAIN -->
-  <main class="flex-1 p-6 overflow-y-auto">
+  <!-- Main -->
+  <main class="flex-1 p-8 space-y-8">
 
-    <!-- ================= DASHBOARD TAB ================= -->
-    <div id="dashboardTab">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h2 class="text-2xl font-semibold">March 2026</h2>
+    </div>
 
-      <!-- HEADER -->
-      <h2 class="text-xl font-semibold mb-6">March 2026</h2>
+    <!-- Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-      <!-- BALANCE CARDS -->
-      <div class="grid grid-cols-3 gap-6 mb-6">
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Main Balance</p>
-          <h1 id="mainBalance" class="text-2xl font-semibold mt-2">₹0</h1>
-        </div>
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Savings A</p>
-          <h1 id="savingsA" class="text-2xl font-semibold mt-2">₹0</h1>
-        </div>
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Savings B</p>
-          <h1 id="savingsB" class="text-2xl font-semibold mt-2">₹0</h1>
-        </div>
-
+      <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow">
+        <p class="text-sm text-gray-500">Main Balance</p>
+        <h3 class="text-2xl font-bold text-red-500">₹-200000</h3>
       </div>
 
-      <!-- ENTRY FORM -->
-      <div class="bg-white p-6 rounded-xl shadow mb-6">
-        <h3 class="text-lg font-semibold mb-4">Add Entry</h3>
-
-        <div class="grid grid-cols-5 gap-3">
-
-          <input id="amount" type="number" placeholder="Amount"
-            class="border p-2 rounded-lg" />
-
-          <select id="type" class="border p-2 rounded-lg">
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
-            <option value="investment">Investment</option>
-            <option value="transfer">Transfer</option>
-          </select>
-
-          <select id="category" class="border p-2 rounded-lg">
-            <option value="Food">Food</option>
-            <option value="Petrol">Petrol</option>
-            <option value="EMI">EMI</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Other">Other</option>
-          </select>
-
-          <select id="account" class="border p-2 rounded-lg">
-            <option value="main">Main</option>
-            <option value="savingsA">Savings A</option>
-            <option value="savingsB">Savings B</option>
-          </select>
-
-          <button onclick="saveEntry()"
-            class="bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            Save
-          </button>
-
-        </div>
+      <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow">
+        <p class="text-sm text-gray-500">Savings A</p>
+        <h3 class="text-2xl font-bold text-green-500">₹0</h3>
       </div>
 
-      <!-- INSIGHTS -->
-      <div class="grid grid-cols-3 gap-6 mb-6">
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Total Spent</p>
-          <h2 id="totalSpent" class="text-xl font-semibold mt-2">₹0</h2>
-        </div>
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Total Invested</p>
-          <h2 id="totalInvested" class="text-xl font-semibold mt-2">₹0</h2>
-        </div>
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">EMI Paid</p>
-          <h2 id="emiPaid" class="text-xl font-semibold mt-2">₹0</h2>
-        </div>
-
-      </div>
-
-      <!-- ENTRIES TABLE -->
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h3 class="text-lg font-semibold mb-4">Entries</h3>
-
-        <table class="w-full text-left">
-          <thead>
-            <tr class="text-gray-500 text-sm border-b">
-              <th class="pb-2">Amount</th>
-              <th>Type</th>
-              <th>Category</th>
-              <th>Account</th>
-            </tr>
-          </thead>
-
-          <tbody id="entriesList" class="text-sm"></tbody>
-        </table>
+      <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow">
+        <p class="text-sm text-gray-500">Savings B</p>
+        <h3 class="text-2xl font-bold text-green-500">₹0</h3>
       </div>
 
     </div>
 
-    <!-- ================= LOANS TAB ================= -->
-    <div id="loansTab" class="hidden">
+    <!-- Add Entry -->
+    <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow space-y-4">
+      <h3 class="text-lg font-semibold">Add Entry</h3>
 
-      <h2 class="text-xl font-semibold mb-6">Loans</h2>
+      <div class="grid md:grid-cols-5 gap-4">
+        <input type="number" placeholder="Amount" class="p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
 
-      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <select class="p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
+          <option>Expense</option>
+          <option>Income</option>
+        </select>
 
-        <div class="grid grid-cols-3 gap-3 mb-4">
-          <input id="loanName" placeholder="Loan Name" class="border p-2 rounded-lg" />
-          <input id="loanTotal" type="number" placeholder="Total Amount" class="border p-2 rounded-lg" />
-          <input id="loanEMI" type="number" placeholder="EMI" class="border p-2 rounded-lg" />
-        </div>
+        <select class="p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
+          <option>Food</option>
+          <option>EMI</option>
+        </select>
 
-        <button onclick="addLoan()"
-          class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-          Add Loan
+        <select class="p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
+          <option>Main</option>
+          <option>Savings A</option>
+        </select>
+
+        <button class="bg-black text-white dark:bg-white dark:text-black rounded-lg">
+          Save
         </button>
+      </div>
+    </div>
 
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow">
+        <p class="text-sm text-gray-500">Total Spent</p>
+        <h3 class="text-xl font-bold">₹0</h3>
       </div>
 
-      <div class="bg-white p-6 rounded-xl shadow">
-        <ul id="loanList" class="space-y-3 text-sm"></ul>
+      <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow">
+        <p class="text-sm text-gray-500">Total Invested</p>
+        <h3 class="text-xl font-bold">₹0</h3>
       </div>
 
+      <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow">
+        <p class="text-sm text-gray-500">EMI Paid</p>
+        <h3 class="text-xl font-bold">₹0</h3>
+      </div>
+
+    </div>
+
+    <!-- Entries Table -->
+    <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] shadow">
+      <h3 class="text-lg font-semibold mb-4">Entries</h3>
+
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-gray-500">
+            <th class="pb-2">Amount</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Account</th>
+          </tr>
+        </thead>
+
+        <tbody class="space-y-2">
+          <tr class="border-t border-gray-200 dark:border-gray-700">
+            <td class="py-2">₹25000</td>
+            <td>Expense</td>
+            <td>EMI</td>
+            <td>Main</td>
+          </tr>
+        </tbody>
+
+      </table>
     </div>
 
   </main>
-
 </div>
 
-<script src="./js/storage.js"></script>
-<script src="./js/balance.js"></script>
-<script src="./js/entries.js"></script>
-<script src="./js/insights.js"></script>
-<script src="./js/loans.js"></script>
-<script src="./js/app.js"></script>
+<script>
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+}
+</script>
 
 </body>
 </html>
